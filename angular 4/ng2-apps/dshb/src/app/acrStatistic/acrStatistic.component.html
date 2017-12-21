@@ -1,0 +1,146 @@
+<div style="margin-top: 81px; padding: 23px">
+
+	<div fxLayout="column"> 
+
+    <div class="row">
+      <form>
+
+        <div class="form-group">
+        	<div class="col-lg-3 col-sm-3">
+          <label class="sr-only" for="text1">Поиск</label>
+            <div class="input-group">
+              <input type="text" class="form-control" id="text1"
+              placeholder="Поиск" name="search" [(ngModel)] = "search" (keyup.enter) = "page = 1; startPage = 1; getAcr()">
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button" (click)="page = 1; startPage = 1; getAcr()">Найти</button>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-lg-3 col-sm-3" *ngIf="orgs">
+            <label class="sr-only" for="text2">Тип</label>
+              <select class="form-control" name="org" [(ngModel)]="org" (change)="page = 1; startPage = 1; onOrgChange()"> 
+                <option value="">(Организация не задана)</option>
+                <option *ngFor="let item of orgs.value" value="{{item.id}}">{{item.name}}</option>
+              </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-lg-3 col-sm-3" *ngIf="users">
+            <label class="sr-only" for="text3">Пользователи</label>
+              <select class="form-control" name="user" [(ngModel)]="user" (change)="page = 1; startPage = 1; onUserChange()"> 
+                <option value="">(Пользователь не задан)</option>
+                <option *ngFor="let item of users.value" value="{{item.id}}">{{item.name}}</option>
+              </select>
+          </div>
+        </div>
+
+      </form>
+    </div>
+      
+    
+
+    <div style="margin-top: 20px" class="form-inline">
+      <div><label>Время действия</label></div>
+      <div class="form-group">
+        <input type="date" class="form-control" [(ngModel)]="dateFrom" (change)="page = 1; startPage = 1; onDateFromChange()">
+      </div>
+      <div style="margin-top: -19px; text-align: center" class="visible-xs-block">&darr;</div>
+      <div class="form-group">
+        <label class="hidden-xs"><span>&mdash;</span></label>
+        <input type="date" class="form-control" [(ngModel)]="dateTo" (change)="page = 1; startPage = 1; onDateToChange()">
+      </div>  
+      
+      <div class="form-group" *ngIf="dates">
+        <label class="sr-only" for="text4">Дата</label>
+          <select class="form-control" [(ngModel)]="date" (change)="page = 1; startPage = 1; onDateChange()"> 
+            <option value="">(Дата не задана)</option>
+            <option *ngFor="let item of dates.value" value="{{item.date_from}} {{item.date_to}}"> {{item.date_from}} &mdash; {{item.date_to}}</option>
+          </select>
+      </div>
+    </div>
+
+  </div>
+    
+
+  <div fxLayout="column">   
+    <div class="md-content" layout-padding>  
+      <p style="margin: 30px 0 -1px 0; font-size: 13px;" class="text-muted" *ngIf="acr">Всего: {{acr.count}}</p>
+        
+      <div *ngIf="acr"> 
+        <table class="table table-condensed table-hover table-striped">
+          <thead>
+            <tr>
+              <th style="min-width: 180px">Название аккредитации</th>
+              <th style="min-width: 140px;">Ф.И.О спортсмена</th>
+              <th style="min-width: 125px">Время запроса</th>
+              <th style="min-width: 200px">Выпустившая организация</th>
+              <th style="min-width: 173px;">Организация-владелец</th>
+              <th style="min-width: 187px;">Организация спортсмена</th>
+              <th style="min-width: 143px;">Время присвоения</th>
+              <th style="min-width: 200px">Присвоившая организация</th>
+              <th style="min-width: 115px;">Осталось дней</th>
+              <th style="min-width: 89px;">ID события</th>
+              <th style="min-width: 84px;">ID запроса</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of acr.value">
+              <td>{{item.name}}</td><td>{{item.fio}}</td><td>{{item.issue_time}}</td>
+              <td>{{item.issue_org}}<p class="text-muted"><small>{{item.issue_user}}</small></p></td>
+              <td>{{item.owner_org_name}}</td>
+              <td>{{item.spm_org}}</td>
+              <td>{{item.assign_time}}</td>
+              <td>{{item.assign_org}}<p class="text-muted"><small>{{item.assign_user}}</small></p></td>
+              <td>{{item.time_left}}</td>
+              <td><a target="_blank" href="/acr/event/{{item.event_id}}/manage">{{item.event_id}}</a></td>
+              <td><a target="_blank" href="/acr/event/{{item.request_id}}/manage">{{item.request_id}}</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="md-content" layout-padding>
+      <nav *ngIf="acr?.count > 7">
+        <ul class="pagination">
+          <li (click)="toFirstPage()">
+            <a aria-label="Previous">
+              <span aria-hidden="true">&lsaquo;&lsaquo;&lsaquo;</span>
+            </a>
+          </li>
+          <li (click)="prevPages()">
+            <a aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <li *ngIf="lastPage-startPage>=0" (click)="setPage(startPage)" [ngClass]="{active: page == startPage}"><a>{{startPage}}</a></li>
+          <li *ngIf="lastPage-(startPage+1)>=0" (click)="setPage(startPage+1)" [ngClass]="{active: page == startPage+1}"><a>{{startPage+1}}</a></li>
+          <li *ngIf="lastPage-(startPage+2)>=0" (click)="setPage(startPage+2)" [ngClass]="{active: page == startPage+2}"><a>{{startPage+2}}</a></li>
+          <li *ngIf="lastPage-(startPage+3)>=0" (click)="setPage(startPage+3)" [ngClass]="{active: page == startPage+3}"><a>{{startPage+3}}</a></li>
+          <li *ngIf="lastPage-(startPage+4)>=0" (click)="setPage(startPage+4)" [ngClass]="{active: page == startPage+4}"><a>{{startPage+4}}</a></li>
+          <li *ngIf="lastPage-(startPage+5)>=0" (click)="setPage(startPage+5)" [ngClass]="{active: page == startPage+5}"><a>{{startPage+5}}</a></li>
+          <li *ngIf="lastPage-(startPage+6)>=0" (click)="setPage(startPage+6)" [ngClass]="{active: page == startPage+6}"><a>{{startPage+6}}</a></li>
+          <li *ngIf="lastPage-(startPage+7)>=0" (click)="setPage(startPage+7)" [ngClass]="{active: page == startPage+7}"><a>{{startPage+7}}</a></li>
+          <li *ngIf="lastPage-(startPage+8)>=0" (click)="setPage(startPage+8)" [ngClass]="{active: page == startPage+8}"><a>{{startPage+8}}</a></li>
+          <li *ngIf="lastPage-(startPage+9)>=0" (click)="setPage(startPage+9)" [ngClass]="{active: page == startPage+9}"><a>{{startPage+9}}</a></li>
+          <li (click)="nextPages()">
+            <a aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+          <li (click)="toLastPage()">
+            <a aria-label="Next">
+              <span aria-hidden="true">&rsaquo;&rsaquo;&rsaquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    
+  </div>
+
+</div>

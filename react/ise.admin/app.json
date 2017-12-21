@@ -1,0 +1,13 @@
+{
+	"name" : "ise.admin",
+  "entry" : "app.ts",
+	"vendors" : ["jquery","react", "react-dom", "react-tap-event-plugin",
+		"material-ui/AppBar", "material-ui/Drawer", "material-ui/MenuItem",
+		"material-ui/RaisedButton", "material-ui/Paper", "material-ui/Toggle",
+	  "material-ui/Tabs", "material-ui/Slider", "material-ui/styles/MuiThemeProvider",
+	  "material-ui/styles/getMuiTheme"],
+	"output" : {
+    "publicPath": "/webapps/_build/ise.admin/",
+		"path": "../scala/src/isportevent.com/static/webapps/_build/ise.admin"
+  }
+}

@@ -1,0 +1,8 @@
+<div style="margin-left: 15px">
+	<md-slide-toggle  #switch (checkedChange)="onEnabled()">{{cat.name}}</md-slide-toggle>
+	<div [style.display]="switch.checked ? '' : 'none'" style="margin: 7px 15px 7px 15px">
+		<md-checkbox style="margin-right: 15px" *ngFor="let x of catValues" 
+		   (change)="onValueChange(x, $event)" [ngModel]="model.data[x.id]">{{x.title}}
+		</md-checkbox>
+	</div>
+</div>

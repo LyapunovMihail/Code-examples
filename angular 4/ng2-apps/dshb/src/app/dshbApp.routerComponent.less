@@ -1,0 +1,126 @@
+md-list-item {
+  margin-left: 0;
+}
+
+.icon-button {
+  margin: 0 6px; 
+  min-width: 0; 
+  border-radius: 50%; 
+  width: 40px; 
+  padding: 0; 
+  color: white
+}
+
+.fixed-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 30;
+}
+
+.flex {
+  flex: 1 1 auto  
+}
+
+md-toolbar:not(.md-menu-toolbar).fixed-toolbar {
+  background-color: #003882;
+}
+.app-menu {
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
+  padding: 0
+}
+
+md-sidenav {
+  background-color: white;
+}
+
+#toolbar {
+  background-color: transparent;
+  color: rgba(0, 0, 0, 0.54);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.account-avatar {
+  vertical-align: initial;
+  margin-bottom: 1px;
+  display: inline-block;
+  border-radius: 50%;
+  height: 32px;
+  width: 32px;
+  cursor: pointer;
+}
+.account-user-wrapper {
+  display: inline-block;
+  height: 35px;
+  margin: 2px 0 0 -13px;
+  text-align: right;
+  width: 262px;
+  vertical-align: top;
+}
+.account-user-links-wrapper {
+  display: inline-block;
+  margin-right: 10px;
+  width: 208px;
+}
+.account-user-links-row {
+  height: 17px;
+  line-height: 16px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.account-user-link,
+.account-user-link:focus {
+  color: #fff;
+  font-size: 13px;
+  line-height: 16px;
+  max-width: 100%;
+  opacity: .7;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: opacity .2s;
+  white-space: nowrap;
+  display: inline-block;
+  text-decoration: none;
+}
+.account-user-link:hover{
+  opacity: 0.9;
+  color: #fff;
+  text-decoration: none;
+}
+
+.account-user-pipe {
+  opacity: .7;
+}
+.account-user-change {
+  max-width: calc((100% - 10px)*.741);
+}
+.account-user-signout {
+  max-width: calc((100% - 10px)*.375);
+}
+
+md-sidenav, md-backdrop {
+  position: fixed;
+}
+
+md-sidenav md-nav-list md-list-item {
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  will-change: color;
+  -webkit-transition: color 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+  transition: color 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+}
+
+md-sidenav md-nav-list md-list-item .md-list-item-inner {
+  padding: 0px 4px;
+  font-size: 14px;
+}
+
+md-list-item div.router-link-active {
+  color: #3f51b5;
+}
+
+active {
+  color: #3f51b5;
+}

@@ -1,0 +1,6 @@
+<div>
+	<md-checkbox #filter (change)="enabledChanged($event.checked)">Фильтр</md-checkbox>
+	<div [style.display]="filter.checked ? '' : 'none'">
+		<filterItem *ngFor="let cat of root.cats" [root]="root" [cat]="cat" (change)="filterItemChanged($event)"></filterItem>
+	</div>	
+</div>

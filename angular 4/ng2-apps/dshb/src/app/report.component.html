@@ -1,0 +1,21 @@
+<div style="margin-top: 56px; padding: 23px">
+
+<div>
+	<md-list>
+
+		<div fxLayout="row">		
+			<div fxLayout="column">		 		
+				<md-list-item *ngIf ="elementData">
+        	<md-icon md-list-icon style="font-size: 30px" class="{{elementData.icon}} md-avatar-icon"></md-icon>
+          	<h3 md-line><a routerLink="/reports/acr">{{elementData.title}}&nbsp;</a></h3>
+          	<p md-line>{{elementData.text}}</p>
+      	</md-list-item>		
+			</div>
+			<div fxLayout="column">	
+			</div>
+		</div>
+
+	</md-list>
+</div>
+
+</div>

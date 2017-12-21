@@ -1,0 +1,54 @@
+/* You can add global styles to this file, and also import other style files */
+
+.warning {
+	border: 1px solid #eee;
+	border-left-width: 5px;
+	border-radius: 3px;
+	border-left-color: #aa6708;
+	padding: 0 20px;
+	margin: 20px 0;
+}
+.warning h4 {
+	color: #aa6708;
+	font-size: 18px;
+	margin-bottom: 5px;
+}
+.warning p {
+  margin: 0 0 23px;
+}
+h3 a, h3 a:focus{
+	color: #CE071E;
+	text-decoration: none;
+}
+h3 a:hover {
+	color: #a10013;
+	text-decoration: none;
+}
+h3 a:-webkit-any-link {
+	text-decoration: none;
+}
+
+.md-subheader {
+  color: #3f51b5;
+  font-size: 34px;
+  font-weight: 400;
+  line-height: 40px;
+  margin: 0;
+  font-family: Roboto,"Helvetica Neue",sans-serif;
+}
+
+md-list-item {
+  margin-left: 0.9em;
+}
+
+.md-avatar-icon {
+  padding: 0px;
+  margin-right: 12px;
+  margin-bottom: 19px;
+}
+
+.md-content {
+	display: block;
+	position: relative;
+	overflow: auto;
+}

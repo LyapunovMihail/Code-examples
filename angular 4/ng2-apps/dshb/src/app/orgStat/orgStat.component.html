@@ -1,0 +1,37 @@
+<div style="margin-top: 30px">
+
+  <section layout-gt-sm="row" style="margin-bottom: 10px">
+    <button md-raised-button class="md-raised" (click)="refreshData()"><span><i class="fa fa-refresh" aria-hidden="true"></i>&nbsp;&nbsp;ОБНОВИТЬ</span></button>
+    <button md-raised-button class="md-raised" (click)="openCfgDialog()"><span><i class="fa fa-cog" aria-hidden="true"></i>&nbsp;&nbsp;НАСТРОЙКИ</span></button>
+  </section>
+
+  <div style="margin-left: -10px">
+  	<md-radio-group>
+	    <md-radio-button *ngFor="let cat of cats; let f = first" value="{{cat.id}}"
+	      (change)="updateCatValues(cat)">{{cat.name}}</md-radio-button>
+	  </md-radio-group>
+  </div>
+
+  <div style="margin-top: 20px" [style.display]="cfgs.filter ? '' : 'none'">
+    <orgFilter [root]="self" (change)="onFilter($event)"></orgFilter>
+  </div>
+
+  <div>
+  	<orgStatItem [root]="self" [dc]="rootDataContainer"></orgStatItem>
+  </div>
+
+  <!--
+  <md-dialog #cfgDialog>
+  </md-dialog>
+  -->
+  <!--
+  <md-dialog #spmPopup>
+  </md-dialog>
+  -->
+
+  <!--
+  <md-dialog #dlgEditSelected>
+  </md-dialog>
+  -->
+
+</div>

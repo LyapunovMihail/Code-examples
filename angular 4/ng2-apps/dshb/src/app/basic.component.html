@@ -1,0 +1,106 @@
+<div style="margin-top: 56px; padding: 23px;">
+
+	<div class="warning" *ngIf="data && !data.isVerified && !isSpm">
+    <h4><i class="fa fa-exclamation-circle"></i> {{data.name}}, ваш аккаунт {{data.email}} не верифицирован</h4>
+    <p *ngIf="!uvrf">Некоторые сервисы могут быть недоступны.<br>
+    Пройдите по
+    <a href="/feedback?message_type=uvrf&message={{feedbackMessage}}" target="_blank">ссылке</a>
+     для того чтобы оставить заявку на верификацию.<br>
+		 Подробнее о процедуре верификации вы можете прочесть в нашем <a href="/blog" target="_blank">блоге</a>.
+		</p>
+		<p *ngIf="uvrf">
+			Ваша заявка на верификацию проверяется
+		</p>
+  </div>
+
+	<div class="md-content">
+
+		<md-list>
+
+			<myChildren></myChildren>
+
+			<span class="md-no-sticky md-subheader">Сервисы для Тхэквондо</span>
+			<div class="md-content" fxLayout="column" fxLayout.gt-sm="row" style="overflow: auto;">
+				<div class="sizeClass" fxFlex>
+					<basic-element name="comp"></basic-element>
+					<basic-element *ngIf="!(isSpm || isSpmParent)" name="comp_cal"></basic-element>
+					<basic-element name="payments"></basic-element>			
+				</div>
+				<div class="sizeClass" fxFlex>
+					<basic-element *ngIf="!(isSpm || isSpmParent)" name="acr"></basic-element>
+					<basic-element *ngIf="!(isSpm || isSpmParent)" name="att"></basic-element>
+					<basic-element *ngIf="!(isSpm || isSpmParent)" name="att_kkw"></basic-element>
+				</div>
+			</div>
+
+			<span class="md-no-sticky md-subheader">Мои данные</span>
+
+			<div class="warning" *ngIf="!(isSpm || isSpmParent) && data && data.companies && !data.companies.length">
+    		<h4><i class="fa fa-exclamation-circle"></i> {{data.name}}, вы не состоите ни в одной организации</h4>
+    		<p>Некоторые сервисы могут быть недоступны.<br>
+    		<a href="/companies" target="_blank">Подать заявку</a> на вступление в организацию.
+				</p>
+  		</div>
+
+			<div class="md-content" fxLayout="column" fxLayout.gt-sm="row">
+				<div class="sizeClass" fxFlex>
+					<basic-element name="account"></basic-element>
+				</div>
+
+				<div class="sizeClass" fxFlex>
+				  <basic-element *ngIf="isSpm" name="my" [visible]="true" href="/sportsmen/{{spm.spm.id}}"></basic-element>
+
+				  <div *ngIf="!isSpm && data?.companies?.length" >
+				  	<md-list-item *ngFor="let company of data?.companies; let last = last" [style.margin-bottom]="last ? '0px' : '-20px'">
+							<div md-list-icon class="avatarWrapper md-avatar-img" *ngIf="company?.image && company?.image !== '/assets/images/no-image-available.png'">
+								<img [src]="company?.image" class="avatar"/>
+							</div>
+	        		<md-icon md-list-icon style="font-size: 30px" class="fa fa-university md-avatar-icon" *ngIf="!company?.image || company?.image == '/assets/images/no-image-available.png'"></md-icon>
+
+          		<h3 md-line><a href="/company/{{company.id}}" title="{{company.name}}">{{company.name}}&nbsp;</a>
+          		</h3>
+          		<p md-line *ngIf="company.isOwner">Моя организация</p>
+      		  </md-list-item>
+      		</div>
+				</div>
+			</div>
+
+			<span class="md-no-sticky md-subheader">Ссылки</span>
+			<div class="md-content" fxLayout="column" fxLayout.gt-sm="row">
+				<div class="sizeClass" fxFlex>
+					<basic-element name="companies"></basic-element>
+					<basic-element *ngIf="!(isSpm || isSpmParent)" name="sport_discipline"></basic-element>
+					<basic-element *ngIf="!(isSpm || isSpmParent)" name="att_tq"></basic-element>
+				</div>
+				<div class="sizeClass" fxFlex>
+					<basic-element *ngIf="!(isSpm || isSpmParent)" name="blog"></basic-element>
+					<basic-element name="feedback"></basic-element>
+					<basic-element name="orgmgr"></basic-element>
+				</div>
+			</div>
+
+			<div *ngIf="perms?.admin">
+				<span class="md-no-sticky md-subheader">Администрирование</span>
+				<div class="md-content" fxLayout="column" fxLayout.gt-sm="row">
+					<div class="sizeClass" fxFlex>
+						<basic-element name="admin.controlPanel"></basic-element>
+						<basic-element name="admin.users"></basic-element>
+						<basic-element name="sportsmens"></basic-element>
+						<basic-element name="admin.security"></basic-element>
+					</div>
+					<div style="max-width:150px">
+					</div>
+					<div class="sizeClass" fxFlex>
+						<basic-element name="admin.scr"></basic-element>
+						<basic-element name="admin.uvrf"></basic-element>
+						<basic-element name="admin.aprv"></basic-element>
+						<basic-element name="admin.audit"></basic-element>
+					</div>
+				</div>
+			</div>
+
+		</md-list>
+
+	</div>
+
+</div>

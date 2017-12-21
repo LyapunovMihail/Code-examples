@@ -1,0 +1,180 @@
+<div *ngIf="data && parent">
+
+	<span class="md-no-sticky md-subheader">Мои дети</span>
+
+	<div class="md-content" *ngIf="children">
+
+		<div fxLayout="row" layout-padding fxLayoutWrap fxFlexFill ng-cloak style="min-width: 335px">
+		  <md-card class="childBadges" *ngFor="let c of children">
+
+		  	<div style="display: flex">
+			  	<div style="min-width: 70px">
+						<img style="max-width: 70px; display: block" src="{{c.person.imageUrl}}" alt="Логотип" *ngIf="c.person.imageUrl">
+						<img style="max-width: 70px; display: block" src="/assets/images/no-image-available.png" alt="Логотип" *ngIf="!c.person.imageUrl">
+					</div>			
+			    <div align="right" class="badgesTextWrapper"> 
+			    	<p><a target="_blank" href="/sportsmen/{{c.person.sportsmens[0]?.spm.id}}" style="text-decoration: none">{{c.person.surname}} {{c.person.first_name}} {{c.person.patronymic}}</a></p>
+			    	<p>{{dateFormat(c.person.birth_date, 'DD.MM.YYYY')}} ({{fromNow(c.person.birth_date, 'DD.MM.YYYY')}})</p>
+			    	<p>{{c.person.sportsmens[0].companies[0].name}}</p>
+			    </div>
+		    </div>
+		    <div class="badgeDelete">
+		      <a style="cursor: pointer" target="_blank" href="/sportsmen/{{c.person.sportsmens[0]?.spm.id}}"> Личный кабинет</a>
+		       &nbsp;
+		     	<a style="cursor: pointer" (click)="deleteChild(c.id)">Удалить</a>
+		    </div>
+		  </md-card>
+		</div>
+
+	</div>
+
+	<div style="margin-bottom: 30px">
+
+		<div style="margin-left: 20px; margin-top: -30px">
+			<button md-button (click)="showChildEdit = !showChildEdit; result = undefined"><span *ngIf="!showChildEdit">ДОБАВИТЬ СПОРТСМЕНА</span><span *ngIf="showChildEdit">ОТМЕНА</span></button>
+		</div>
+
+		<div *ngIf="showChildEdit" style="margin-left: 20px; padding: 20px">
+      <h3 style="margin-bottom: 25px">Добавить спортсмена</h3>
+			<form fxLayout="column" fxLayout.gt-sm="row" (input)="child = undefined; result = undefined">
+			  <div class="form-group">
+			    <label>Фамилия</label>
+			    <input type="text" class="form-control" [(ngModel)]="childData.surName" name="surName">
+			  </div>
+			  <div class="form-group">
+			    <label>Имя</label>
+			    <input type="text" class="form-control" [(ngModel)]="childData.name" name="name">
+			  </div>
+				<div class="form-group">
+			    <label>Отчество</label>
+			    <input type="text" class="form-control" [(ngModel)]="childData.patronymic" name="patronymic">
+			  </div>
+			  <div class="form-group">
+			    <label style="min-width: 109px">Дата рождения</label>
+			    <input type="date" class="form-control" [(ngModel)]="childData.dateBirth" name="dateBirth" min="{{dateMin}}" max="{{dateMax}}">
+			  </div>
+				<div class="form-group">
+			  	<button type="submit" class="btn btn-default"
+			  	[style.top]="windowWidth >= 960 ? '25px' : '0'" (click)="findChild()">Найти</button>
+				</div>
+			</form>
+
+			<div class="warning" id="warning" *ngIf="result"> 
+    		<h4><i class="fa fa-exclamation-circle"></i> {{result.message}}</h4>
+  		</div>
+  		
+			<div *ngIf="child?.id && child.sportsmens.length && child.sportsmens[0].companies.length">
+				<div fxLayout.gt-sm="row">
+					<md-card class="childBadges"
+					 style="padding-bottom: 30px" fxLayout="row" [style.margin-left]="windowWidth >= 960 ? '0' : '0px'">
+					  	<div style="min-width: 90px;">
+								<img style="max-width: 90px; display: block" src="{{child.imageUrl}}" alt="Логотип" *ngIf="child.imageUrl">
+								<img style="max-width: 90px; display: block" src="assets/images/no-image-available.png" alt="Логотип" *ngIf="!child.imageUrl">
+							</div>
+					    <div align="right" class="badgesTextWrapper">
+					    	<p>{{child.surname}} {{child.first_name}} {{child.patronymic}}</p>
+					    	<p>{{dateFormat(child.birth_date, 'DD.MM.YYYY')}} ({{fromNow(child.birth_date, 'DD.MM.YYYY')}})</p>
+					    	<p>{{child.sportsmens[0].companies[0].name}}</p>
+					    </div>
+				  </md-card>
+			  </div>
+			  <input type="text" style="width: 220px" [(ngModel)]="sportsmenNum" placeholder="Введите id спортсмена"/>
+			  <div>
+				<button md-button style="margin-top: 10px !important" (click)="createChild(true)">ДОБАВИТЬ СПОРТСМЕНА</button>
+				</div>
+				<!--<button md-button>Добавить</button>-->
+			</div>
+
+			<div style="margin-top: 20px" *ngIf="child && (!child.id || !child.sportsmens.length
+			|| !child.sportsmens[0].companies.length)">
+
+				<table style="min-width: 300px" class="hidden-xs">
+					<body>
+						<tr>
+							<td style="text-align: right">Фамилия &nbsp;&nbsp;</td><th>{{childData.surName}}</th>
+						</tr>
+						<tr>
+							<td style="text-align: right">Имя &nbsp;&nbsp;</td><th>{{childData.name}}</th>
+						</tr>
+						<tr>
+							<td style="text-align: right">Отчество &nbsp;&nbsp;</td><th>{{childData.patronymic}}</th>
+						</tr>
+						<tr>
+							<td style="text-align: right">Дата рождения &nbsp;&nbsp;</td>
+							<th>{{dateFormat(childData.dateBirth, 'YYYY-MM-DD')}} ({{fromNow(childData.dateBirth, 'YYYY-MM-DD')}})</th>
+						</tr>
+						<tr *ngIf="!child.id">
+							<td style="text-align: right">Пол &nbsp;&nbsp;</td>
+							<th><label class="radio-inline">
+							  <input type="radio" name="sex" (click)="childData.sex = 'm'"
+								[checked]="childData.sex === 'm'"> Мужской
+							</label>
+							<label class="radio-inline">
+							  <input type="radio" name="sex" (click)="childData.sex = 'f'"
+								[checked]="childData.sex === 'f'"> Женский
+							</label></th>
+						</tr>
+					</body>
+				</table>
+
+				<form class="visible-xs">
+				  <div class="form-group">
+				    <label>Фамилия</label>
+				    <p class="form-control-static" style="margin-">{{childData.surName}}</p>
+				  </div>
+				  <div class="form-group minusMarginTop">
+				    <label>Имя</label>
+				    <p class="form-control-static">{{childData.name}}</p>
+				  </div>
+					<div class="form-group minusMarginTop">
+				    <label>Отчество</label>
+				    <p class="form-control-static">{{childData.patronymic}}</p>
+				  </div>
+					<div class="form-group minusMarginTop">
+				    <label>Дата рождения</label>
+				    <p class="form-control-static">{{dateFormat(childData.dateBirth, 'YYYY-MM-DD')}} ({{fromNow(childData.dateBirth, 'YYYY-MM-DD')}})</p>
+				  </div>
+					<div class="form-group minusMarginTop" *ngIf="!child.id">
+						<label>Пол</label>
+						<div style="margin-top: -5px" layout="row" layout-wrap>
+							  <div><input type="radio" name="sex" (click)="childData.sex = 'm'"
+								[checked]="childData.sex === 'm'"> Мужской</div>
+							  <div><input type="radio" name="sex" (click)="childData.sex = 'f'"
+								[checked]="childData.sex === 'f'"> Женский</div>
+						</div>
+					</div>
+				</form>
+
+				<div style="margin-top: 15px">
+					<span>Введите код приглашения</span>
+					<div>
+						<input type="text" style="width: 220px" #key [(ngModel)]="orgKey"
+						   (change)="getOrgByKey(key.value)" (input)="orgByKey = undefined"/>
+						<button class="btn btn-xs" (click)="getOrgByKey(key.value)">Проверить</button>
+					</div>
+
+				  <div style="margin-top: 10px" *ngIf="orgByKey && orgByKey.message === 'good'">
+						<span class="text-muted">Организация: </span><span style="color: blue">{{orgByKey.orgName}}</span>
+					</div>
+					<div *ngIf="orgByKey && orgByKey.message === 'good'">
+						<div style="margin-top: 10px">
+							<p class="text-muted">Вид спорта: <span style="color: red">{{orgByKey.sportName}}</span></p>
+						</div>
+						<div style="margin-top: 5px">
+							<button md-raised-button class="md-raised" (click)="createChild()">Добавить</button>
+						</div>
+					</div>
+					<div class="errorMsg" *ngIf="orgByKey && orgByKey.message !== 'good'">{{orgByKey.message}}</div>
+
+				</div>
+
+
+
+			</div>
+
+
+		</div>
+
+	</div>
+
+</div>

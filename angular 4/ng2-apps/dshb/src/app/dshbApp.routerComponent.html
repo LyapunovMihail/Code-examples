@@ -1,0 +1,56 @@
+<div fxLayout="column">
+
+    <md-sidenav-container fullscreen>
+
+        <md-sidenav fxLayout="column" #left class="app-menu" style="min-width: 275px">
+            <md-toolbar id="toolbar">
+                <h4>{{selectedItem}}</h4>
+            </md-toolbar>
+            <div>
+                <md-nav-list>
+                    <md-list-item (click)="onSelect('Главная'); left.close()" routerLink="/main">
+                        <div class="md-list-item-inner" [class.active]="selectedItem === 'Главная'">Главная</div>
+                    </md-list-item>
+                    <md-list-item (click)="onSelect('Отчеты'); left.close()" routerLink="/reports">
+                        <div class="md-list-item-inner" [class.active]="selectedItem === 'Отчеты'">Отчеты</div>
+                    </md-list-item>
+                    <md-list-item (click)="onSelect('Статистика'); left.close()" routerLink="/stat">
+                        <div class="md-list-item-inner" [class.active]="selectedItem === 'Статистика'">Статистика</div>
+                    </md-list-item>
+                </md-nav-list>
+            </div>
+        </md-sidenav>
+
+        <md-toolbar class="fixed-toolbar">
+            <button md-button class="icon-button" (click)="left.toggle()"><md-icon>menu</md-icon></button>
+            <h4 style="color: white; font-weight: normal">
+                <span>{{siteName}}</span> &ndash;
+                <span>{{selectedItem}}</span>
+            </h4>
+            <span fxFlex></span>
+            <div class="account-user-wrapper" *ngIf="data">
+                <div class="account-user-links-wrapper">
+                    <div class="account-user-links-row">
+                        <a class="account-user-link" href="/account">{{data.name}}</a>
+                    </div>
+                    <div class="account-user-links-row">
+                        <a class="account-user-link account-user-change" href="/account">{{data.email}}</a>
+                        <span class="account-user-link account-user-pipe">|</span>
+                        <a class="account-user-link account-user-signout" href="/signout">Выйти</a>
+                    </div>
+                </div>
+                <img *ngIf="data?.image" class="account-avatar" src="{{data.image}}" (click)="goToAccount()">
+                <img *ngIf="!data?.image" class="account-avatar" src="/images/no-avatar.png" (click)="goToAccount()">
+            </div>
+        </md-toolbar>
+
+
+        <div fxLayout="column">
+
+            <router-outlet></router-outlet>
+
+        </div>
+
+    </md-sidenav-container>
+    
+</div>

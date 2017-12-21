@@ -1,0 +1,56 @@
+<div [ngStyle]="{'margin-top': dc.parent !== null ? '-5px' : '0px'}">
+
+	<div fxLayout="row">
+		<h4>{{level}}.{{ind}} {{dc?.org?.name}}</h4>
+		<div style="margin-top: 7px; margin-left: 10px" *ngIf="root.cfgs.details">
+			<md-checkbox [ngModel]="details" (change)="details = !details">Детализация</md-checkbox>
+	  </div>
+		<button *ngIf="dc.childs.length && dc.sum" md-raised-button class="md-raised" (click)="show = !show"><span *ngIf="!show">+</span><span *ngIf="show">-</span></button>
+	</div>
+
+  <div fxLayout="row">
+  	<table class="table table-bordered table-condensed" style="max-width: 400px">
+  		<tbody>
+  		  <tr *ngIf="catValues.length > 10 && root.cfgs.details && details">
+  				<td><b>Всего</b></td>
+  				<td width="15%" align="center"><a (click)="showSpm(orgId, root.curCat, null, dc.sum)"><b>{{dc.sum}}</b></a></td>
+  				<td width="15%" align="center" *ngIf="root.cfgs.percents"><b>%</b></td>
+  			</tr>
+
+  			<tr *ngFor="let value of catValues" title="{{value.title}}" style="max-width: 100px" [style.display]="root.cfgs.details && details ? '' : 'none'">
+  				<td style="max-width: 100px">{{value.title}}</td>
+  				<td width="15%" align="center"><a (click)="showSpm(orgId, root.curCat.id, value.id, dc.getValue(value.id), value.title)">{{dc.getValue(value.id)}}</a></td>
+  				<td width="15%" align="center" *ngIf="root.cfgs.percents">{{dc.getValue(value.id) | percentsOf : dc.sum}}%</td>
+				</tr>
+
+  			<tr>
+  				<td><b>Всего</b></td>
+  				<td width="15%" align="center"><a (click)="showSpm(orgId, root.curCat.id, null, dc.sum, null)"><b>{{dc.sum}}</b></a></td>
+  				<td width="15%" align="center" *ngIf="root.cfgs.percents && root.cfgs.details && details"><b>%</b></td>
+  			</tr>
+  		</tbody>
+		</table>
+
+		<div>
+			<button style="margin-left: 90px" md-button (click)="graphic = !graphic" *ngIf="root.cfgs.graphics"><span *ngIf="!graphic">Показать график</span><span *ngIf="graphic">Скрыть график</span></button>
+			<charts [dc]="dc" [root]="root" *ngIf="root.cfgs.graphics && graphic"></charts>
+		</div>
+  </div>
+
+	<div *ngIf="show">
+		<table>
+			<tbody>
+				<tr>
+					<td style="width: 50px;">
+
+					</td>
+					<td>
+					<orgStatItem *ngFor="let childDc of dc.childs; let i = index" [root]="root" [dc]="childDc" [index]="i" [ngStyle]="{'display': childDc.sum ? '' : 'none'}">
+					</orgStatItem>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+</div>

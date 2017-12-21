@@ -1,0 +1,9 @@
+<md-list-item *ngIf ="elementData">
+  <md-icon md-list-icon style="font-size: 30px" class="{{elementData.icon}} md-avatar-icon"></md-icon>
+    <h3 md-line><a href="{{url}}" title="{{elementData.title}}">{{elementData.title}}&nbsp;</a>
+    	<i style="cursor: pointer" title="Вы не верифицированы и не можете смотреть {{elementData.title}}" class="fa fa-exclamation-circle" *ngIf="data && !data.isVerified && (name === 'acr' || name === 'att')"></i>
+    	<div class="badges" *ngIf="(name === 'admin.scr') && scr"><span>{{scr}}</span></div>
+      <div class="badges" *ngIf="(name === 'admin.uvrf') && uvrf"><span>{{uvrf}}</span></div>
+    </h3>
+    <p md-line title="{{elementData.text}}">{{elementData.text}}</p>
+</md-list-item>

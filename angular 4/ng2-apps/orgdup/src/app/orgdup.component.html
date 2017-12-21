@@ -1,0 +1,132 @@
+<div *ngIf="loading" align="center">
+	<i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+	<span style="font-size: 24px">Загрузка...</span>
+</div>
+
+<div style="padding: 10px" *ngIf="!loading">
+
+	<div style="margin-top: 15px">
+		<div class="row">
+	  <div class="col-sm-7 col-md-5">
+	  	<form>
+		    <div class="input-group">
+		      <input type="text" class="form-control" placeholder="Поиск организации по названию" [(ngModel)]="orgName" name="name" (keyup.enter)="getOrgs()" (change)="orgName = $event.target.value">
+		      <span class="input-group-btn">
+		        <button class="btn btn-default" type="button" (click)="getOrgs()">Поиск</button>
+		      </span>
+		    </div>
+	    </form>
+	  </div>
+	</div>
+	</div>
+
+	<table width="100%">
+		<tr>
+			<th width="33%">Все</th>
+			<th width="33%">Главная</th>
+			<th width="33%">Дубликаты</th>
+		</tr>
+		<tr>
+			<td valign="top">
+				<ol *ngFor="let result of pageOrgs; let i=index">
+					<b>
+						<a *ngIf="!result.org.noDisplay" href="/company/{{result.org.id}}" target="_blank">{{result.org.name}}</a>
+						<span *ngIf="result.org.noDisplay" style="color: #eee">{{result.org.name}}</span> 
+						<span title="Проверенная организация" style="color : #1DCAFF" *ngIf="result.org.verified" [style.color]="result.org.noDisplay ? '#eee' : '#1DCAFF'">
+							<i class="fa fa-check-circle"></i>
+						</span> 
+						<button type="button" class="btn btn-primary btn-xs hiddenBtn" (click)="allToMain(result.org)" [class.disabled]="result.org.noDisplay">
+							 <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
+						</button>
+					</b> 
+					<br>
+					<li *ngFor="let org of result.items" [style.color]="org.noDisplay ? '#eee' : ''">
+						<a *ngIf="!org.noDisplay" href="/company/{{org.id}}" target="_blank">{{org.name}}</a>
+						<span *ngIf="org.noDisplay" style="color: #eee">{{org.name}}</span>   
+						<span title="Проверенная организация" style="color : #1DCAFF" 
+						*ngIf="org.verified" [style.color]="org.noDisplay ? '#eee' : '#1DCAFF'">
+							<i class="fa fa-check-circle"></i>
+						</span> 
+						<button type="button" class="btn btn-primary btn-xs hiddenBtn" (click)="allToMain(org)" [class.disabled]="org.noDisplay">
+							 <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
+						</button>		
+					</li>
+				</ol>
+			</td>
+			<td style="border-left: 1px solid" valign="top" align="center">
+				<ol class="main-dups">
+					<li *ngFor="let org of mainMas">
+						<button type="button" class="btn btn-primary btn-xs hiddenBtn" (click)="mainToAll(org)">
+							 <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
+						</button>	
+						<a href="/company/{{org.id}}" target="_blank">{{org.name}}</a>
+						<span title="Проверенная организация" style="color : #1DCAFF" *ngIf="org.verified">	
+							<i class="fa fa-check-circle"></i>
+						</span> 
+						<button type="button" class="btn btn-primary btn-xs hiddenBtn" (click)="mainToDups(org)">
+							 <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
+						</button>
+					</li>
+				</ol>
+			</td>
+			<td style="border-left: 1px solid" valign="top">
+				<ol class="main-dups">
+					<li *ngFor="let org of dupsMas">
+						<button type="button" class="btn btn-primary btn-xs hiddenBtn" (click)="dupsToMain(org)">
+							<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
+						</button>	
+						<a href="/company/{{org.id}}" target="_blank">{{org.name}}</a>
+						<span title="Проверенная организация" style="color : #1DCAFF" *ngIf="org.verified">	
+							<i class="fa fa-check-circle"></i>
+						</span> 
+					</li>
+				</ol>
+				<div align="left">
+					<div id="button2Div">
+						<!--<button type="button" class="btn btn-success" id="button2" *ngIf="mainMas.length===1 && dupsMas.length > 0" (click)="uniteOrgs()">Объединить</button>-->
+					</div>
+					<button type="button" class="btn btn-success" id="button" *ngIf="mainMas.length===1 && dupsMas.length > 0" (click)="uniteOrgs()">Объединить</button>
+				</div>
+			</td>
+		</tr>
+	</table>
+
+	<div style="margin-top: 20px" *ngIf="results.data.length > 20">
+		<nav aria-label="Search results pages">
+		  <ul class="pagination">
+		    <li (click)="toFirstPage()">
+		      <a aria-label="Previous">
+		        <span aria-hidden="true">&lsaquo;&lsaquo;&lsaquo;</span>
+		      </a>
+		    </li>
+		    <li (click)="prevPages()">
+		      <a aria-label="Previous">
+		        <span aria-hidden="true">&laquo;</span>
+		      </a>
+		    </li>
+		    <li *ngIf="lastPage >= startPage" (click)="setPage(startPage)" [class.active]="currentPage===startPage"><a>{{startPage}}</a></li>
+		    <li *ngIf="lastPage >= startPage+1" (click)="setPage(startPage+1)" [class.active]="currentPage===startPage+1"><a>{{startPage+1}}</a></li>
+		    <li *ngIf="lastPage >= startPage+2" (click)="setPage(startPage+2)" [class.active]="currentPage===startPage+2"><a>{{startPage+2}}</a></li>
+		    <li *ngIf="lastPage >= startPage+3" (click)="setPage(startPage+3)" [class.active]="currentPage===startPage+3"><a>{{startPage+3}}</a></li>
+		    <li *ngIf="lastPage >= startPage+4" (click)="setPage(startPage+4)" [class.active]="currentPage===startPage+4"><a>{{startPage+4}}</a></li>
+		    <li *ngIf="lastPage >= startPage+5" (click)="setPage(startPage+5)" [class.active]="currentPage===startPage+5"><a>{{startPage+5}}</a></li>
+		    <li *ngIf="lastPage >= startPage+6" (click)="setPage(startPage+6)" [class.active]="currentPage===startPage+6"><a>{{startPage+6}}</a></li>
+		    <li *ngIf="lastPage >= startPage+7" (click)="setPage(startPage+7)" [class.active]="currentPage===startPage+7"><a>{{startPage+7}}</a></li>
+		    <li *ngIf="lastPage >= startPage+8" (click)="setPage(startPage+8)" [class.active]="currentPage===startPage+8"><a>{{startPage+8}}</a></li>
+		    <li *ngIf="lastPage >= startPage+9" (click)="setPage(startPage+9)" [class.active]="currentPage===startPage+9"><a>{{startPage+9}}</a></li>
+		    <li (click)="nextPages()">
+		      <a aria-label="Previous">
+		        <span aria-hidden="true">&raquo;</span>
+		      </a>
+		    </li>
+		    <li (click)="toLastPage()">
+		      <a aria-label="Next">
+		        <span aria-hidden="true">&rsaquo;&rsaquo;&rsaquo;</span>
+		      </a>
+		    </li>
+		  </ul>
+		</nav>
+	</div>
+	
+</div>
+

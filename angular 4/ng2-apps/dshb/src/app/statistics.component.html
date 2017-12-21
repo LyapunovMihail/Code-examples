@@ -1,0 +1,10 @@
+<div style="margin-top: 36px; padding: 23px">
+ 	<h1>Статистика по организациям</h1>
+
+  <div class="org-stat" *ngIf="user">
+    <div *ngFor="let o of user.companies">
+      <orgStat [orgId]="o.id"></orgStat>
+    </div>
+  </div>
+
+</div>
